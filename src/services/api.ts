@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { invites, posts, shares, users } from "../types/DbTypes";
 import { BASE_URL } from "./constants";
 
 export const api = axios.create({
@@ -14,6 +15,20 @@ export interface IDefaultResponse {
 
 export interface ILoginResponse extends IDefaultResponse {
     token: string;
+}
+
+export type IUser = users & {
+    invites: invites[];
+    posts: posts[];
+    shares: shares[];
+}
+
+interface IGetUser extends IDefaultResponse {
+    user: users & {
+        invites: invites[];
+        posts: posts[];
+        shares: shares[];
+    }
 }
 
 export async function testLogin() {
@@ -38,5 +53,14 @@ export async function verify(email: string, code: number) {
 }
 export async function login(email: string, password: string) {
     const response = await api.post<ILoginResponse>("/users/login", { email, password });
+    return response.data;
+}
+export async function getUser() {
+    const token = await AsyncStorage.getItem("@token");
+    const response = await api.get<IGetUser>("/users", {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
     return response.data;
 }

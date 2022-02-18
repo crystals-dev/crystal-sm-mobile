@@ -6,6 +6,7 @@ import Feed from "../Feed";
 import Notifications from "../Notifications";
 import Settings from "../Settings";
 import {Ionicons} from "@expo/vector-icons";
+import main from "../../theme/main";
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
@@ -13,7 +14,15 @@ export default function Home(): JSX.Element {
 
     return (
         <Tab.Navigator initialRouteName="Feed" screenOptions={{
-            headerShown: false
+            tabBarInactiveBackgroundColor: main.pDark,
+            tabBarActiveBackgroundColor: main.pDark,
+            headerStyle: {
+                backgroundColor: main.sDark
+            },
+            headerTitleStyle: {
+                color: main.text,
+                fontSize: 20
+            }
         }}>
             <Tab.Screen name="Feed" component={Feed} options={{
                 tabBarLabel: "Home",
